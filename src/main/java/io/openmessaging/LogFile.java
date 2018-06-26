@@ -67,11 +67,11 @@ public class LogFile {
             writeIndex += size;
             //System.out.println("wrindex="+writeIndex);
             unFlushSize += size;
-            if(unFlushSize > 4*1024){
-              //  System.out.println("刷出");
-                mappedByteBuffer.force();
-                unFlushSize = 0;
-            }
+//            if(unFlushSize > 4*1024){
+//              //  System.out.println("刷出");
+//                mappedByteBuffer.force();
+//                unFlushSize = 0;
+//            }
             return LogFile.SUCCESS;
         } else {
             mappedByteBuffer.force();

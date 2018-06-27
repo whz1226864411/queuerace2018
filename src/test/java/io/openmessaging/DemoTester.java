@@ -15,7 +15,7 @@ public class DemoTester {
     public static void main(String args[]) throws Exception {
         //评测相关配置
         //发送阶段的发送数量，也即发送阶段必须要在规定时间内把这些消息发送完毕方可
-        int msgNum  = 10000000;
+        int msgNum  = 20000000;
 //        int msgNum  = 1000000000;
         //发送阶段的最大持续时间，也即在该时间内，如果消息依然没有发送完毕，则退出评测
         int sendTime = 10 * 60 * 1000;
@@ -28,9 +28,9 @@ public class DemoTester {
         //消费阶段的总队列数量
         int checkQueueNum = 100;
         //发送的线程数量
-        int sendTsNum = 1;
+        int sendTsNum = 20;
         //消费的线程数量
-        int checkTsNum = 1;
+        int checkTsNum = 20;
 
         ConcurrentMap<String, AtomicInteger> queueNumMap = new ConcurrentHashMap<>();
         for (int i = 0; i < queueNum; i++) {

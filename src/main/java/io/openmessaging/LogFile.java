@@ -47,12 +47,20 @@ public class LogFile {
 //            byte[] queueNameLength = new byte[4];
 //            Bytes.int2bytes(queueName.length(),queueNameLength,0);
 //            byte[] qName = queueName.getBytes();
-            byte[] messageLength = new byte[4];
-            Bytes.int2bytes(message.length ,messageLength,0);
+//            byte[] messageLength = new byte[4];
+//            Bytes.int2bytes(message.length ,messageLength,0);
 //            mappedByteBuffer.put(queueNameLength);
 //            mappedByteBuffer.put(qName);
-            mappedByteBuffer.put(messageLength);
+
+
+
+            mappedByteBuffer.put((byte) (message.length >>> 24));
+            mappedByteBuffer.put((byte) (message.length >>> 16));
+            mappedByteBuffer.put((byte) (message.length >>> 8));
+            mappedByteBuffer.put((byte) message.length);
+//            mappedByteBuffer.put(messageLength);
             mappedByteBuffer.put(message);
+
             List<MessageIndex> indexList = null;
             if(indexMap.containsKey(queueName)){
                 indexList = indexMap.get(queueName);

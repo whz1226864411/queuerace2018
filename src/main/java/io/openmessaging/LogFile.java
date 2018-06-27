@@ -66,7 +66,7 @@ public class LogFile {
             indexList.add(messageIndex);
             writeIndex += size;
             //System.out.println("wrindex="+writeIndex);
-            unFlushSize += size;
+//            unFlushSize += size;
 //            if(unFlushSize > 4*1024){
 //              //  System.out.println("刷出");
 //                mappedByteBuffer.force();
@@ -74,7 +74,7 @@ public class LogFile {
 //            }
             return LogFile.SUCCESS;
         } else {
-            mappedByteBuffer.force();
+//            mappedByteBuffer.force();
             return LogFile.END_FILE;
         }
     }

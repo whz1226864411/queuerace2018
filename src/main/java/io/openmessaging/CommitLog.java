@@ -42,7 +42,7 @@ public class CommitLog {
 //            }
 //            putMessage(queueName,message);
 //        }
-        synchronized (writeLock){
+//        synchronized (writeLock){
             int result = this.nowLogFile.appendMessage(queueName, message,indexMap,nowIndex.get());
             if(result == LogFile.END_FILE){
                 int  i = this.nowIndex.getAndIncrement();
@@ -50,7 +50,7 @@ public class CommitLog {
                 createLogFile(path);
                 putMessage(queueName,message);
             }
-        }
+//        }
     }
 
     public Collection<byte[]> getMessage(String queueName, long offset, long num){

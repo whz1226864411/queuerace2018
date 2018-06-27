@@ -17,14 +17,14 @@ public class DefaultQueueStoreImpl extends QueueStore {
     }
 
     public Collection<byte[]> get(String queueName, long offset, long num) {
-        if(flush == false){
-            synchronized (this){
-                if (flush == false) {
-                    commitLog.getNowLogFile().flush();
-                    flush = true;
-                }
-            }
-        }
+//        if(flush == false){
+//            synchronized (this){
+//                if (flush == false) {
+//                    commitLog.getNowLogFile().flush();
+//                    flush = true;
+//                }
+//            }
+//        }
         return commitLog.getMessage(queueName, offset, num);
     }
 

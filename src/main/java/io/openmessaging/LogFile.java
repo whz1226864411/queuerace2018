@@ -74,7 +74,7 @@ public class LogFile {
 //            }
             return LogFile.SUCCESS;
         } else {
-//            mappedByteBuffer.force();
+            mappedByteBuffer.force();
             return LogFile.END_FILE;
         }
     }

@@ -10,6 +10,7 @@ import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -39,49 +40,30 @@ public class LogFile {
         }
     }
 
-    public int appendMessage(String queueName, byte[] message,Map<String, List<MessageIndex>> indexMap,int logIndex){
+    public int appendMessage(byte[] message , int logIndex, MappedByteBuffer indexFile,int pos,long start){
         int size = 4;
-//        size += queueName.length();
         size += message.length;
         if(CommitLog.FILE_SIZE - writeIndex - 1 >= size){
-//            byte[] queueNameLength = new byte[4];
-//            Bytes.int2bytes(queueName.length(),queueNameLength,0);
-//            byte[] qName = queueName.getBytes();
-            byte[] messageLength = new byte[4];
-            Bytes.int2bytes(message.length ,messageLength,0);
-//            mappedByteBuffer.put(queueNameLength);
-//            mappedByteBuffer.put(qName);
-
-//            mappedByteBuffer.put((byte) (message.length >>> 24));
-//            mappedByteBuffer.put((byte) (message.length >>> 16));
-//            mappedByteBuffer.put((byte) (message.length >>> 8));
-//            mappedByteBuffer.put((byte) message.length);
-
-            mappedByteBuffer.put(messageLength);
+            mappedByteBuffer.put((byte) (message.length >>> 24));
+            mappedByteBuffer.put((byte) (message.length >>> 16));
+            mappedByteBuffer.put((byte) (message.length >>> 8));
+            mappedByteBuffer.put((byte) message.length);
             mappedByteBuffer.put(message);
 
-            List<MessageIndex> indexList = null;
-            if(indexMap.containsKey(queueName)){
-                indexList = indexMap.get(queueName);
-            }else {
-                indexList = new ArrayList<>();
-                indexMap.put(queueName,indexList);
-            }
-            MessageIndex messageIndex = new MessageIndex();
-            messageIndex.setLogIndex(logIndex);
-            messageIndex.setMessageIndex(writeIndex);
-            indexList.add(messageIndex);
+            indexFile.position((int) (start + pos));
+            indexFile.put((byte) (logIndex >>> 24));
+            indexFile.put((byte) (logIndex >>> 16));
+            indexFile.put((byte) (logIndex >>> 8));
+            indexFile.put((byte) logIndex);
+            indexFile.put((byte) (writeIndex >>> 24));
+            indexFile.put((byte) (writeIndex >>> 16));
+            indexFile.put((byte) (writeIndex >>> 8));
+            indexFile.put((byte) writeIndex);
+//            System.out.println(writeIndex);
             writeIndex += size;
-            //System.out.println("wrindex="+writeIndex);
-//            unFlushSize += size;
-//            if(unFlushSize > 4*1024){
-//              //  System.out.println("刷出");
-//                mappedByteBuffer.force();
-//                unFlushSize = 0;
-//            }
+
             return LogFile.SUCCESS;
         } else {
-            mappedByteBuffer.force();
             return LogFile.END_FILE;
         }
     }
@@ -91,6 +73,7 @@ public class LogFile {
         ByteBuffer byteBuffer = mappedByteBuffer.slice();
         byteBuffer.position(msgIndex);
         int length = byteBuffer.getInt();
+        System.out.println("length="+length);
         byte[] bytes = new byte[length];
         byteBuffer.get(bytes);
         return bytes;

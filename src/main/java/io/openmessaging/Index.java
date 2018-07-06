@@ -9,19 +9,11 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Created by Administrator on 2018-07-03.
  */
 public class Index {
-    private long start;
+    private int start;
     private int writePos;
     private int count;
 
     private static AtomicInteger atomicInteger = new AtomicInteger();
-
-    public long getStart() {
-        return start;
-    }
-
-    public void setStart(long start) {
-        this.start = start;
-    }
 
 
     public int getWritePos() {
@@ -31,8 +23,6 @@ public class Index {
     public void setWritePos(int writePos) {
         this.writePos = writePos;
     }
-
-
 
 
     public void increaseWritePos(){
@@ -49,5 +39,13 @@ public class Index {
 
     public void increaseCount(){
         this.count++;
+    }
+
+    public int getStart() {
+        return start;
+    }
+
+    public void setStart(int start) {
+        this.start = start;
     }
 }

@@ -40,7 +40,7 @@ public class LogFile {
         }
     }
 
-    public int appendMessage(byte[] message , int logIndex, MappedByteBuffer indexFile,int pos,long start){
+    public int appendMessage(byte[] message , int logIndex, MappedByteBuffer indexFile,int pos,int start){
         int size = 4;
         size += message.length;
         if(CommitLog.FILE_SIZE - writeIndex - 1 >= size){
@@ -50,7 +50,7 @@ public class LogFile {
             mappedByteBuffer.put((byte) message.length);
             mappedByteBuffer.put(message);
 
-            indexFile.position((int) (start + pos));
+            indexFile.position(start + pos);
             indexFile.put((byte) (logIndex >>> 24));
             indexFile.put((byte) (logIndex >>> 16));
             indexFile.put((byte) (logIndex >>> 8));
@@ -73,7 +73,7 @@ public class LogFile {
         ByteBuffer byteBuffer = mappedByteBuffer.slice();
         byteBuffer.position(msgIndex);
         int length = byteBuffer.getInt();
-        System.out.println("length="+length);
+//        System.out.println("length="+length);
         byte[] bytes = new byte[length];
         byteBuffer.get(bytes);
         return bytes;

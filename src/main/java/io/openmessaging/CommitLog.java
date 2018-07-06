@@ -21,7 +21,6 @@ public class CommitLog {
 //    private static final String ROOT_PATH = "E:/queue2018/commitlog/";
     private static final String ROOT_PATH = "/alidata1/race2018/data/";
     private List<LogFile> logFileList = new ArrayList<>();
-    private Map<String, List<MessageIndex>> indexMap =  new HashMap<>();
     private final AtomicInteger nowIndex = new AtomicInteger(0);
     private volatile LogFile nowLogFile = null;
     public static final int FILE_SIZE = 1024 * 1024 * 1024;
@@ -29,10 +28,9 @@ public class CommitLog {
 
     //索引
     private Map<String,Index> indexStartMap = new HashMap<>();
-    private long start = 0;
+    private int start = 0;
     private IndexFile[] indexFileList = new IndexFile[100];
-    public static final int FOUR_K = 4*1024;
-    private Map<String,MappedByteBuffer> mappedByteBufferHashMap = new HashMap<>();
+    public static final int ONE_K = 1024;
     //
 
     public CommitLog(){
@@ -45,14 +43,14 @@ public class CommitLog {
         if (index == null){
             index = new Index();
             index.setStart(start);
-            start += FOUR_K;
+            start += ONE_K;
             indexStartMap.put(queueName,index);
         }
         return index;
     }
 
     public IndexFile getIndexFile(int pos) throws IOException {
-        int i = pos / FOUR_K;
+        int i = pos / ONE_K;
         IndexFile indexFile = null;
         if (indexFileList[i] != null){
             indexFile = indexFileList[i];
@@ -63,7 +61,7 @@ public class CommitLog {
                 file.getParentFile().mkdirs();
             }
             RandomAccessFile randomAccessFile = new RandomAccessFile(file,"rw");
-            randomAccessFile.setLength(4*1024*1024*1024L);
+            randomAccessFile.setLength(1024*1024*1024L);
             indexFile = new IndexFile();
             FileChannel fileChannel = randomAccessFile.getChannel();
             indexFile.setFileChannel(fileChannel);
@@ -81,11 +79,11 @@ public class CommitLog {
                 int pos = index.getWritePos();
                 IndexFile indexFile = getIndexFile(pos);
 
-                MappedByteBuffer mappedByteBuffer = indexFile.getMappedByteBuffer(index.getStart());
-                int result = this.nowLogFile.appendMessage( message ,nowIndex.get(),mappedByteBuffer,(pos % 4096),(index.getStart() % IndexFile.MIDDLE));
+                MappedByteBuffer mappedByteBuffer = indexFile.getMappedByteBuffer();
+                int result = this.nowLogFile.appendMessage( message ,nowIndex.get(),mappedByteBuffer,(pos % ONE_K),index.getStart());
                 //int result = this.nowLogFile.appendMessage( message ,nowIndex.get(),null,0,0);
                 if(result == LogFile.END_FILE){
-                    int  i = this.nowIndex.getAndIncrement();
+                    int  i = this.nowIndex.incrementAndGet();
                     String path = ROOT_PATH + String.valueOf(i) + ".log";
                     createLogFile(path);
                     putMessage(queueName,message);
@@ -107,23 +105,22 @@ public class CommitLog {
         try {
             Index index = getIndex(queueName);
             long start = index.getStart();
-            int readPos = (int) offset * 8;
+            int readPos = (int) (offset * 8);
             int count = index.getCount();
-            IndexFile indexFile = getIndexFile(readPos);
-            MappedByteBuffer mappedByteBuffer = indexFile.getMappedByteBuffer(start);
-            mappedByteBuffer.position(0);
-            ByteBuffer byteBuffer = mappedByteBuffer.slice();
-            start %= IndexFile.MIDDLE;
-            start += readPos;
             for (int i = 0; i < num; i++) {
                 if (offset < count){//数量达到
-                    byteBuffer.position((int) (start + i*8));
+                    IndexFile indexFile = getIndexFile(readPos);
+                    MappedByteBuffer mappedByteBuffer = indexFile.getMappedByteBuffer();
+                    mappedByteBuffer.position(0);
+                    ByteBuffer byteBuffer = mappedByteBuffer.slice();
+                    byteBuffer.position((int) (start + readPos % ONE_K));
                     int logIndex = byteBuffer.getInt();//可以优化，拿出来
                     int readIndex = byteBuffer.getInt();
                     LogFile logFile = logFileList.get(logIndex);
-                    System.out.println("readIndex=" + readIndex);
                     byte[] bytes = logFile.getMessage(readIndex);
                     result.add(bytes);
+
+                    readPos += 8;
                 }else {
                     break;
                 }

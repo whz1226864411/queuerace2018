@@ -173,7 +173,7 @@ public class DemoTester {
                     Collection<byte[]> msgs = queueStore.get(queueName, index, 10);
                     for (byte[] msg : msgs) {
                         if (!new String(msg).equals(String.valueOf(index++))) {
-                            System.out.println("Check error");
+                            System.out.println("Check error"+";index="+(index-1));
                             System.exit(-1);
                         }
                     }

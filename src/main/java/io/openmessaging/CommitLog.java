@@ -1,5 +1,6 @@
 package io.openmessaging;
 
+import javax.xml.transform.Result;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -8,10 +9,7 @@ import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -46,6 +44,7 @@ public class CommitLog {
             start += ONE_K;
             indexStartMap.put(queueName,index);
         }
+
         return index;
     }
 
@@ -72,10 +71,10 @@ public class CommitLog {
 
 
 
-    public void putMessage(String queueName, byte[] message){
+    public void putMessage(String queueName, byte[] message){//空循环32s
         synchronized (writeLock){
             try {
-                Index index = getIndex(queueName);//耗费了3s
+                Index index = getIndex(queueName);//耗费了30s
                 int pos = index.getWritePos();
                 IndexFile indexFile = getIndexFile(pos);
 
@@ -88,7 +87,7 @@ public class CommitLog {
                     createLogFile(path);
                     putMessage(queueName,message);
                 }else {
-                    index.increaseWritePos();
+                    index.increaseWritePos();//10s
                     index.increaseCount();
                 }
 

@@ -1,5 +1,7 @@
 package io.openmessaging;
 
+import io.openmessaging.v2.CommitLogV2;
+
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -9,23 +11,23 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class DefaultQueueStoreImpl extends QueueStore {
 
-    private CommitLog commitLog = new CommitLog();
-    private volatile boolean flush = false;
+//    private CommitLog commitLog = new CommitLog();
+//
+//    public void put(String queueName, byte[] message) {
+//        commitLog.putMessage(queueName, message);
+//    }
+//
+//    public Collection<byte[]> get(String queueName, long offset, long num) {
+//        return commitLog.getMessage(queueName, offset, num);
+//    }
+    private CommitLogV2 commitLogV2 = new CommitLogV2();
 
-    public  void put(String queueName, byte[] message) {
-        commitLog.putMessage(queueName, message);
+    public void put(String queueName, byte[] message) {
+        commitLogV2.putMessage(queueName, message,null);
     }
 
     public Collection<byte[]> get(String queueName, long offset, long num) {
-//        if(flush == false){
-//            synchronized (this){
-//                if (flush == false) {
-//                    commitLog.getNowLogFile().flush();
-//                    flush = true;
-//                }
-//            }
-//        }
-        return commitLog.getMessage(queueName, offset, num);
+        return commitLogV2.getMessage(queueName,offset,num,null,null,0);
     }
 
 

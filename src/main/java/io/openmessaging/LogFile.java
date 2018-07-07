@@ -1,5 +1,6 @@
 package io.openmessaging;
 
+import io.openmessaging.v2.CommitLogV2;
 import sun.nio.ch.FileChannelImpl;
 
 import java.io.File;
@@ -34,23 +35,23 @@ public class LogFile {
             }
             this.randomAccessFile = new RandomAccessFile(file,"rw");
             this.fileChannel = randomAccessFile.getChannel();
-            this.mappedByteBuffer = fileChannel.map(FileChannel.MapMode.READ_WRITE,0,CommitLog.FILE_SIZE);
+            this.mappedByteBuffer = fileChannel.map(FileChannel.MapMode.READ_WRITE,0, CommitLogV2.FILE_SIZE);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public int appendMessage(byte[] message , int logIndex, MappedByteBuffer indexFile,int pos,int start){
+    public int appendMessage(byte[] message , int logIndex, MappedByteBuffer indexFile,int pos,int start) throws IOException {
         int size = 4;
         size += message.length;
         if(CommitLog.FILE_SIZE - writeIndex - 1 >= size){
-            mappedByteBuffer.put((byte) (message.length >>> 24));
+            mappedByteBuffer.put((byte) (message.length >>> 24));//15s
             mappedByteBuffer.put((byte) (message.length >>> 16));
             mappedByteBuffer.put((byte) (message.length >>> 8));
             mappedByteBuffer.put((byte) message.length);
             mappedByteBuffer.put(message);
 
-            indexFile.position(start + pos);
+            indexFile.position(start + pos);//10s
             indexFile.put((byte) (logIndex >>> 24));
             indexFile.put((byte) (logIndex >>> 16));
             indexFile.put((byte) (logIndex >>> 8));
@@ -80,6 +81,6 @@ public class LogFile {
     }
 
     public void flush(){
-        this.mappedByteBuffer.force();
+
     }
 }

@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -16,12 +17,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class CommitLogV2 {
     private static final String ROOT_PATH = "/alidata1/race2018/data/";
     private List<LogFileV2> logFileList = new ArrayList<>();
-    private int nowIndex = -1;
+    private volatile int nowIndex = -1;
     public static final int FILE_SIZE = 1024 * 1024 * 1024;
     private Object writeLock = new Object();
+    private Object createFileLock = new Object();
 
     //索引
-    private Map<String, IndexV2> indexV2Map = new HashMap<>();
+    private Map<String, IndexV2> indexV2Map = new ConcurrentHashMap<>();
 //    private Map<Integer, IndexV2> indexV2Map = new HashMap<>();
     private int start = 0;
 
@@ -30,45 +32,57 @@ public class CommitLogV2 {
     }
 
     public void createLogFile(){//创建数据文件
-        this.nowIndex++;
-        String path = ROOT_PATH + this.nowIndex + ".log";
-        File file = new File(path);
-        LogFileV2 logFile = new LogFileV2(file);
-        logFileList.add(logFile);
+        int temp = this.nowIndex;
+        synchronized (createFileLock){
+            if (temp == this.nowIndex){
+                this.nowIndex++;
+                String path = ROOT_PATH + this.nowIndex + ".log";
+                File file = new File(path);
+                LogFileV2 logFile = new LogFileV2(file);
+                logFileList.add(logFile);
+            }
+        }
     }
 
     public IndexV2 getIndexV2(String queueName) {//获取索引
         IndexV2 indexV2 = indexV2Map.get(queueName);
         if (indexV2 == null){
-            indexV2 = new IndexV2();
-            indexV2.setStart(start);
-            start += LogFileV2.BLOCK_SIZE;
-            indexV2Map.put(queueName, indexV2);
+            synchronized (indexV2Map){
+                indexV2 = indexV2Map.get(queueName);
+                if (indexV2 == null){
+                    indexV2 = new IndexV2();
+                    indexV2.setStart(start);
+                    start += LogFileV2.BLOCK_SIZE;
+                    indexV2Map.put(queueName, indexV2);
+                }
+            }
         }
         return indexV2;
     }
 
     public void putMessage(String queueName, byte[] message, IndexV2 indexV2) {
-        synchronized (writeLock){
+
             try {
                 if (indexV2 == null){
                     indexV2 = getIndexV2(queueName);
                 }
-                short indexPos = indexV2.getIndexPos();
-                LogFileV2 logFileV2 = logFileList.get(indexPos);
-                int result = logFileV2.appendMessage(message,indexV2);
-                if (result == LogFileV2.END_FILE){
-                    indexV2.insert();
-                    indexPos = indexV2.getIndexPos();
-                    if (logFileList.size() -1 < indexPos){
-                        createLogFile();
+                synchronized (indexV2){
+                    short indexPos = indexV2.getIndexPos();
+                    LogFileV2 logFileV2 = logFileList.get(indexPos);
+                    int result = logFileV2.appendMessage(message,indexV2);
+                    if (result == LogFileV2.END_FILE){
+                        indexV2.insert();
+                        indexPos = indexV2.getIndexPos();
+                        if (logFileList.size() -1 < indexPos){
+                            createLogFile();
+                        }
+                        putMessage(queueName,message,indexV2);
                     }
-                    putMessage(queueName,message,indexV2);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
+
     }
 
 

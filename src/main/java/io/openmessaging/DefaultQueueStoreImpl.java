@@ -28,27 +28,38 @@ public class DefaultQueueStoreImpl extends QueueStore {
     private AtomicInteger atomicInteger3 = new AtomicInteger();
 
     public void put(String queueName, byte[] message) {
-        if (atomicInteger.get() < 300){
-            System.out.println("queueName="+queueName+";message="+new String(message));
-            atomicInteger.getAndIncrement();
-        }
-        if (message.length > 60 && atomicInteger1.get() < 400){
-            System.out.println("message="+message.length);
-            atomicInteger1.getAndIncrement();
-        }
+//        if (atomicInteger.get() < 300){
+//            System.out.println("queueName="+queueName+";message="+new String(message));
+//            atomicInteger.getAndIncrement();
+//        }
+//        if (message.length > 60 && atomicInteger1.get() < 400){
+//            System.out.println("message="+message.length);
+//            atomicInteger1.getAndIncrement();
+//        }
         commitLogV2.putMessage(queueName, message,null);
     }
 
     public Collection<byte[]> get(String queueName, long offset, long num) {
-        if (atomicInteger2.get() < 300){
-            System.out.println("queueName="+queueName+";offset="+offset+";num="+num);
-            atomicInteger2.getAndIncrement();
-        }
+//        if (atomicInteger2.get() < 300){
+//            System.out.println("queueName="+queueName+";offset="+offset+";num="+num);
+//            atomicInteger2.getAndIncrement();
+//        }
 
         Collection<byte[]> result = commitLogV2.getMessage(queueName,offset,num,null,null,0);
-        if (result.size() != num){
-            System.out.println("num=" + num + "queName=" + queueName + ";size=" + result.size() + ";off="+offset);
+        List<byte[]> resul = (List<byte[]>) result;
+        if(atomicInteger.get() > 1000000 - 20){
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("queueName="+queueName+";offset="+offset+";num="+num+";size="+resul.size());
+            for (int i = 0; i < result.size(); i++) {
+                stringBuilder.append("msg"+i+"="+new String(resul.get(i)));
+            }
+            System.out.println(stringBuilder.toString());
         }
+        atomicInteger.getAndIncrement();
+
+//        if (result.size() != num){
+//            System.out.println("num=" + num + "queName=" + queueName + ";size=" + result.size() + ";off="+offset);
+//        }
         return result;
     }
 

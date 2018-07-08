@@ -22,6 +22,7 @@ public class LogFileV2 {
     public final static int SUCCESS = 200;
     public final static int END_FILE = 300;
     public final static int BLOCK_SIZE = 1024;
+    public final static short END = -1;
 
     public LogFileV2(File file) {
         try {
@@ -42,20 +43,21 @@ public class LogFileV2 {
         int start = indexV2.getStart();
         int remain = LogFileV2.BLOCK_SIZE - writePos;
         short size = (short) (2 + length);
+        ByteBuffer byteBuffer = mappedByteBuffer.slice();
         if( remain >= size){
-            mappedByteBuffer.position(start + writePos);//定位
-            mappedByteBuffer.put((byte) (length >>> 8));
-            mappedByteBuffer.put((byte) length);
-            mappedByteBuffer.put(message);
+            byteBuffer.position(start + writePos);//定位
+            byteBuffer.put((byte) (length >>> 8));
+            byteBuffer.put((byte) length);
+            byteBuffer.put(message);
 
             //修改索引
             indexV2.increaseWritePos(size);
             return LogFileV2.SUCCESS;
         } else {
             if (remain >= 2) {
-                mappedByteBuffer.position(start + writePos);//定位
-                mappedByteBuffer.put((byte) (-1 >>> 8));
-                mappedByteBuffer.put((byte) -1);
+                byteBuffer.position(start + writePos);//定位
+                byteBuffer.put((byte) (END >>> 8));
+                byteBuffer.put((byte) END);
             }
             return LogFileV2.END_FILE;
         }

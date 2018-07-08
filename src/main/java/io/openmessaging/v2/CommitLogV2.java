@@ -22,6 +22,7 @@ public class CommitLogV2 {
 
     //索引
     private Map<String, IndexV2> indexV2Map = new HashMap<>();
+//    private Map<Integer, IndexV2> indexV2Map = new HashMap<>();
     private int start = 0;
 
     public CommitLogV2(){
@@ -84,7 +85,7 @@ public class CommitLogV2 {
         short readSize = 0;
         LogFileV2 logFileV2 = logFileList.get(logIndex);
         MappedByteBuffer mappedByteBuffer = logFileV2.getMappedByteBuffer();
-        mappedByteBuffer.position(0);
+        //mappedByteBuffer.position(0);
         ByteBuffer byteBuffer = mappedByteBuffer.slice();
         byteBuffer.position(readPos);
         short length = 0;

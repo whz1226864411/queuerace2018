@@ -11,27 +11,30 @@ import java.util.concurrent.atomic.AtomicLong;
 //该评测程序主要便于选手在本地优化和调试自己的程序
 
 public class DemoTester {
-
+    private static String s = "qqqqqazxswedcvfrtgbnhhqqqqssssqqq444514qqqqqqqqqqqqqqq";
+    private static byte[] data = s.getBytes();
     public static void main(String args[]) throws Exception {
         //评测相关配置
         //发送阶段的发送数量，也即发送阶段必须要在规定时间内把这些消息发送完毕方可
-//        int msgNum  = 10000000;
-        int msgNum  = 300000000;
+        int msgNum  = 10000000;
+//        int msgNum  = 300000000;
 //        int msgNum  = 1000000000;
         //发送阶段的最大持续时间，也即在该时间内，如果消息依然没有发送完毕，则退出评测
         int sendTime = 10 * 60 * 1000;
         //消费阶段的最大持续时间，也即在该时间内，如果消息依然没有消费完毕，则退出评测
         int checkTime = 10 * 60 * 1000;
         //队列的数量
-        int queueNum = 1000000;
+        int queueNum = 100000;
         //正确性检测的次数
-        int checkNum = 1000000;
+        int checkNum = 100000;
         //消费阶段的总队列数量
         int checkQueueNum = 1000000;
         //发送的线程数量
         int sendTsNum = 10;
         //消费的线程数量
         int checkTsNum = 10;
+
+
 
         ConcurrentMap<String, AtomicInteger> queueNumMap = new ConcurrentHashMap<>();
         for (int i = 0; i < queueNum; i++) {
@@ -135,7 +138,9 @@ public class DemoTester {
                 try {
                     String queueName = "Queue-" + count % queueCounter.size();
                     synchronized (queueCounter.get(queueName)) {
-                        queueStore.put(queueName, String.valueOf(queueCounter.get(queueName).getAndIncrement()).getBytes());
+//                        queueStore.put(queueName, String.valueOf(queueCounter.get(queueName).getAndIncrement()).getBytes());
+                        queueStore.put(queueName, DemoTester.data);
+                        queueCounter.get(queueName).getAndIncrement();
                     }
                 } catch (Throwable t) {
                     t.printStackTrace();
@@ -172,8 +177,8 @@ public class DemoTester {
                     if (index < 0) index = 0;
                     Collection<byte[]> msgs = queueStore.get(queueName, index, 10);
                     for (byte[] msg : msgs) {
-                        if (!new String(msg).equals(String.valueOf(index++))) {
-                            System.out.println("Check error"+";index="+(index-1));
+                        if (!new String(msg).equals(DemoTester.s)) {
+                            System.out.println("Check error");
                             System.exit(-1);
                         }
                     }
@@ -215,7 +220,7 @@ public class DemoTester {
                         if (msgs != null && msgs.size() > 0) {
                             pullOffsets.get(queueName).getAndAdd(msgs.size());
                             for (byte[] msg : msgs) {
-                                if (!new String(msg).equals(String.valueOf(index++))) {
+                                if (!new String(msg).equals(DemoTester.s)) {
                                     System.out.println("Check error");
                                     System.exit(-1);
                                 }

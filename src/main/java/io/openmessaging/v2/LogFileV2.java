@@ -40,7 +40,7 @@ public class LogFileV2 {
         short length = (short) message.length;
         short writePos = indexV2.getWritePos();
         int start = indexV2.getStart();
-        int remain = LogFileV2.BLOCK_SIZE - writePos - 1;
+        int remain = LogFileV2.BLOCK_SIZE - writePos;
         short size = (short) (2 + length);
         if( remain >= size){
             mappedByteBuffer.position(start + writePos);//定位

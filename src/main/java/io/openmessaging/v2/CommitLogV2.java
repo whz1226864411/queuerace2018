@@ -74,7 +74,7 @@ public class CommitLogV2 {
     public Collection<byte[]> getMessage(String queueName, long offset, long num,
                                          List<byte[]> result,IndexV2 indexV2, int logIndex){
         if (result == null){
-            result = new ArrayList<byte[]>((int) num);
+            result = new ArrayList<>();
             indexV2 = getIndexV2(queueName);
             logIndex = indexV2.search((short) offset);
         }

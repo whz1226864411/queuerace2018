@@ -13,7 +13,7 @@ public class IndexV2 {
     private short count = 0;//消息数量
 
     public IndexV2(){
-            insert();
+        insert();
     }
 
     public int search(short offset) {//二分查找找位置

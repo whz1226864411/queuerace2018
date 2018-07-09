@@ -28,18 +28,18 @@ public class CommitLogV2 {
     private int start = 0;
 
     public CommitLogV2(){
-        createLogFile();
+        createLogFile((short) 0);
     }
 
-    public void createLogFile(){//创建数据文件
-        int temp = this.nowIndex;
+    public void createLogFile(short indexPos){//创建数据文件
         synchronized (createFileLock){
-            if (temp == this.nowIndex){
+            if (logFileList.size() - 1 < indexPos){
                 this.nowIndex++;
                 String path = ROOT_PATH + this.nowIndex + ".log";
                 File file = new File(path);
                 LogFileV2 logFile = new LogFileV2(file);
                 logFileList.add(logFile);
+                logFileList.size();
             }
         }
     }
@@ -61,7 +61,6 @@ public class CommitLogV2 {
     }
 
     public void putMessage(String queueName, byte[] message, IndexV2 indexV2) {
-
             try {
                 if (indexV2 == null){
                     indexV2 = getIndexV2(queueName);
@@ -74,8 +73,9 @@ public class CommitLogV2 {
                         logFileV2.decrease(indexV2);
                         indexV2.insert();
                         indexPos = indexV2.getIndexPos();
-                        if (logFileList.size() -1 < indexPos){
-                            createLogFile();
+                        //System.out.println(indexPos);
+                        if (logFileList.size() - 1 < indexPos){
+                            createLogFile(indexPos);
                         }
                         putMessage(queueName,message,indexV2);
                     }

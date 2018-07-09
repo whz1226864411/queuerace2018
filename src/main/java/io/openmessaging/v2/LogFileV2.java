@@ -22,7 +22,7 @@ public class LogFileV2 {
     public final static int SUCCESS = 200;
     public final static int END_FILE = 300;
     public final static int BLOCK_SIZE = 1024;
-    public final static short END = -1;
+    public final static short END = 0;
 
     public LogFileV2(File file) {
         try {

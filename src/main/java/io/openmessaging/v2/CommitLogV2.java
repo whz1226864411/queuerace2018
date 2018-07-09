@@ -111,8 +111,8 @@ public class CommitLogV2 {
             byteBuffer.position(readPos);
         }
         for (int i = 0; i < num; i++) {
-            if (offset < indexV2.getCount()){
-                if ( LogFileV2.BLOCK_SIZE - readSize >= 2 && (length = byteBuffer.getShort()) != -1){
+            if (offset + i  < indexV2.getCount()){
+                if ( LogFileV2.BLOCK_SIZE - readSize >= 2 && (length = byteBuffer.getShort()) != 0){
                     byte[] bytes = new byte[length];
                     byteBuffer.get(bytes);
                     result.add(bytes);

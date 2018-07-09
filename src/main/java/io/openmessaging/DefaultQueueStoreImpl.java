@@ -26,7 +26,6 @@ public class DefaultQueueStoreImpl extends QueueStore {
 //    private AtomicInteger atomicInteger1 = new AtomicInteger();
 //    private AtomicInteger atomicInteger2 = new AtomicInteger();
 //    private AtomicInteger atomicInteger3 = new AtomicInteger();
-    private Map<Integer,Integer> map = new ConcurrentHashMap<>();
 
     public void put(String queueName, byte[] message) {
 //        if (atomicInteger.get() < 300){
@@ -37,26 +36,17 @@ public class DefaultQueueStoreImpl extends QueueStore {
 //            System.out.println("message="+message.length);
 //            atomicInteger1.getAndIncrement();
 //        }
-        int size = message.length;
-        Integer s = map.get(size);
-        if (s == null){
-            map.put(size,0);
-        } else {
-            map.put(size,s+1);
-        }
-        //commitLogV2.putMessage(queueName, message,null);
+
+        commitLogV2.putMessage(queueName, message,null);
     }
 
     public Collection<byte[]> get(String queueName, long offset, long num) {
-        for (Integer i : map.keySet()){
-            System.out.println("length="+i+";size="+map.get(i));
-        }
 //        if (atomicInteger2.get() < 300){
 //            System.out.println("queueName="+queueName+";offset="+offset+";num="+num);
 //            atomicInteger2.getAndIncrement();
 //        }
 
-        //Collection<byte[]> result = commitLogV2.getMessage(queueName,offset,num,null,null,0);
+        Collection<byte[]> result = commitLogV2.getMessage(queueName,offset,num,null,null,0);
 //        List<byte[]> resul = (List<byte[]>) result;
 //        if(atomicInteger.get() > 1000000 - 20){
 //            StringBuilder stringBuilder = new StringBuilder();
@@ -71,7 +61,7 @@ public class DefaultQueueStoreImpl extends QueueStore {
 //        if (result.size() != num){
 //            System.out.println("num=" + num + "queName=" + queueName + ";size=" + result.size() + ";off="+offset);
 //        }
-        return new ArrayList<byte[]>();
+        return result;
     }
 
 

@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicLong;
 //该评测程序主要便于选手在本地优化和调试自己的程序
 
 public class DemoTester {
-    private static String s = "qqqqqazxssssdsadwedfasfasdasdacvfrgatgbnhfasfafaghqqdasdasda";
+    private static String s = "qqqqqazxssssdsadwedfasfasdasdacvfrgatgbnhfasfafaghqqdasdas";
     private static byte[] data = s.getBytes();
     public static void main(String args[]) throws Exception {
         //评测相关配置
@@ -22,11 +22,11 @@ public class DemoTester {
         //发送阶段的最大持续时间，也即在该时间内，如果消息依然没有发送完毕，则退出评测
         int sendTime = 10 * 60 * 1000;
         //消费阶段的最大持续时间，也即在该时间内，如果消息依然没有消费完毕，则退出评测
-        int checkTime = 10 * 60 * 1000;
+        int checkTime = 1800*1000;
         //队列的数量
-        int queueNum = 100000;
+        int queueNum = 1000000;
         //正确性检测的次数
-        int checkNum = 100000;
+        int checkNum = 1000000;
         //消费阶段的总队列数量
         int checkQueueNum = 100000;
         //发送的线程数量

@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicLong;
 //该评测程序主要便于选手在本地优化和调试自己的程序
 
 public class DemoTester {
-    private static String s = "qqqqqazxssssdsadwedfasfasdasdacvfrgatgbnhfasfafaghqqdasdasdasdaqqssss";
+    private static String s = "qqqqqazxssssdsadwedfasfasdasdacvfrgatgbnhfasfafaghqqdasdasda";
     private static byte[] data = s.getBytes();
     public static void main(String args[]) throws Exception {
         //评测相关配置

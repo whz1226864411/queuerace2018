@@ -71,6 +71,7 @@ public class CommitLogV2 {
                     LogFileV2 logFileV2 = logFileList.get(indexPos);
                     int result = logFileV2.appendMessage(message,indexV2);
                     if (result == LogFileV2.END_FILE){
+                        logFileV2.decrease(indexV2);
                         indexV2.insert();
                         indexPos = indexV2.getIndexPos();
                         if (logFileList.size() -1 < indexPos){

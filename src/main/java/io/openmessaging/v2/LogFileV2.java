@@ -10,6 +10,7 @@ import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by Administrator on 2018-07-07.
@@ -17,11 +18,14 @@ import java.util.List;
 public class LogFileV2 {
 
     private RandomAccessFile randomAccessFile;
-    private MappedByteBuffer mappedByteBuffer;
+    private MappedByteBuffer readMap;
     private FileChannel fileChannel;
+    private MappedByteBuffer[] writeMap = new MappedByteBuffer[16];
+    private AtomicInteger[] umapSize = new AtomicInteger[16];
     public final static int SUCCESS = 200;
     public final static int END_FILE = 300;
     public final static int BLOCK_SIZE = 1024;
+    public final static int SIXTY_FOUR_SIZE = 64*1024*1024;
     public final static short END = 0;
 
     public LogFileV2(File file) {
@@ -31,7 +35,11 @@ public class LogFileV2 {
             }
             this.randomAccessFile = new RandomAccessFile(file,"rw");
             this.fileChannel = randomAccessFile.getChannel();
-            this.mappedByteBuffer = fileChannel.map(FileChannel.MapMode.READ_WRITE,0, CommitLogV2.FILE_SIZE);
+            this.readMap = fileChannel.map(FileChannel.MapMode.READ_WRITE,0, CommitLogV2.FILE_SIZE);
+            for (int i = 0; i < 16; i++) {
+                this.writeMap[i] = fileChannel.map(FileChannel.MapMode.READ_WRITE,i*SIXTY_FOUR_SIZE,SIXTY_FOUR_SIZE);
+                umapSize[i] = new AtomicInteger(0);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -41,11 +49,15 @@ public class LogFileV2 {
         short length = (short) message.length;
         short writePos = indexV2.getWritePos();
         int start = indexV2.getStart();
+        if (writePos == 0){
+            umapSize[start/SIXTY_FOUR_SIZE].getAndIncrement();
+        }
         int remain = LogFileV2.BLOCK_SIZE - writePos;
         short size = (short) (2 + length);
-        ByteBuffer byteBuffer = mappedByteBuffer.slice();
+        ByteBuffer byteBuffer = writeMap[start/SIXTY_FOUR_SIZE].slice();
+        int jidian = start % SIXTY_FOUR_SIZE;
         if( remain >= size){
-            byteBuffer.position(start + writePos);//定位
+            byteBuffer.position(jidian + writePos);//定位
             byteBuffer.put((byte) (length >>> 8));
             byteBuffer.put((byte) length);
             byteBuffer.put(message);
@@ -55,7 +67,7 @@ public class LogFileV2 {
             return LogFileV2.SUCCESS;
         } else {
             if (remain >= 2) {
-                byteBuffer.position(start + writePos);//定位
+                byteBuffer.position(jidian + writePos);//定位
                 byteBuffer.put((byte) (END >>> 8));
                 byteBuffer.put((byte) END);
             }
@@ -63,7 +75,15 @@ public class LogFileV2 {
         }
     }
 
+    public void decrease(IndexV2 indexV2){
+        int start = indexV2.getStart();
+        int i = umapSize[start/SIXTY_FOUR_SIZE].decrementAndGet();
+        if (i == 0){
+            ReleaseUtil.releaseMap(writeMap[start/SIXTY_FOUR_SIZE]);
+        }
+    }
+
     public MappedByteBuffer getMappedByteBuffer(){
-        return mappedByteBuffer;
+        return readMap;
     }
 }

@@ -34,7 +34,7 @@ public class CommitLogV2 {
     public synchronized void createLogFile(short indexPos){//创建数据文件
         synchronized (createFileLock){
             if (this.nowIndex < indexPos){
-                String path = ROOT_PATH + this.nowIndex + ".log";
+                String path = ROOT_PATH + (this.nowIndex+ 1) + ".log";
                 File file = new File(path);
                 LogFileV2 logFile = new LogFileV2(file);
                 logFileList[this.nowIndex + 1] = logFile;

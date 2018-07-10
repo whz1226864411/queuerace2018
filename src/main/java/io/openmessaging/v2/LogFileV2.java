@@ -4,6 +4,7 @@ import io.openmessaging.CommitLog;
 import io.openmessaging.LogFile;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
@@ -19,7 +20,7 @@ public class LogFileV2 {
 
     private RandomAccessFile randomAccessFile;
     private MappedByteBuffer readMap;
-    private MappedByteBuffer writeMap;
+    private volatile MappedByteBuffer writeMap;
     private FileChannel fileChannel;
     private File file;
     public final static int SUCCESS = 200;
@@ -29,6 +30,7 @@ public class LogFileV2 {
     public final static int SIXTY_FOUR_SIZE = 64*1024*1024;
     public final static short END = 0;
     private AtomicInteger atomicInteger = new AtomicInteger(0);
+
 
     public LogFileV2(File file) {
         try {
@@ -46,7 +48,7 @@ public class LogFileV2 {
     }
 
     public int appendMessage(byte[] message ,IndexV2 indexV2) throws IOException {
-        if (indexV2.getStart() == 0){
+        if (indexV2.getWritePos() == 0){
             atomicInteger.getAndIncrement();
         }
         short length = (short) message.length;
@@ -77,7 +79,14 @@ public class LogFileV2 {
     public void decrease(){
         int i = atomicInteger.decrementAndGet();
         if (i == 0){
-            ReleaseUtil.releaseMap(writeMap);
+//            synchronized (writeMap){
+//                if (this.writeMap != null){
+            System.out.println("umap");
+                    ReleaseUtil.releaseMap(writeMap);
+//                    this.writeMap = null;
+//                }
+//            }
+
         }
     }
 

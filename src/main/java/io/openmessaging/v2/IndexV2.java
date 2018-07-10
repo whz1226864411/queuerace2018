@@ -87,4 +87,5 @@ public class IndexV2 {
     public void setCount(short count) {
         this.count = count;
     }
+
 }

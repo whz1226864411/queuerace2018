@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -98,7 +99,6 @@ public class CommitLogV2 {
         short readSize = 0;
         LogFileV2 logFileV2 = logFileList[logIndex];
         MappedByteBuffer mappedByteBuffer = logFileV2.getMappedByteBuffer();
-        //mappedByteBuffer.position(0);
         ByteBuffer byteBuffer = mappedByteBuffer.slice();
         byteBuffer.position(readPos);
         short length = 0;
@@ -126,5 +126,16 @@ public class CommitLogV2 {
         }
         return result;
     }
+
+//    public short getShort(FileChannel fileChannel,ByteBuffer byteBuffer){
+//        byteBuffer.clear();
+//        try {
+//            fileChannel.read(byteBuffer);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        byteBuffer.flip();
+//        return byteBuffer.getShort();
+//    }
 
 }

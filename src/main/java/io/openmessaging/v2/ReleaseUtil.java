@@ -13,7 +13,6 @@ import java.nio.MappedByteBuffer;
 public class ReleaseUtil {
     public static void releaseMap( MappedByteBuffer buffer){
         try {
-            buffer.force();
             Method m = FileChannelImpl.class.getDeclaredMethod("unmap",
                     MappedByteBuffer.class);
             m.setAccessible(true);

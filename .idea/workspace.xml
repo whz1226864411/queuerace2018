@@ -3,9 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="75a2f0bb-454e-4bd8-81a8-e67584276a2a" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/io/openmessaging/DemoTester.java" afterPath="$PROJECT_DIR$/src/main/java/io/openmessaging/DemoTester.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/io/openmessaging/v2/CommitLogV2.java" afterPath="$PROJECT_DIR$/src/main/java/io/openmessaging/v2/CommitLogV2.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/io/openmessaging/v2/LogFileV2.java" afterPath="$PROJECT_DIR$/src/main/java/io/openmessaging/v2/LogFileV2.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/io/openmessaging/v2/ReleaseUtil.java" afterPath="$PROJECT_DIR$/src/main/java/io/openmessaging/v2/ReleaseUtil.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -22,8 +20,8 @@
       <file leaf-file-name="CommitLogV2.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/io/openmessaging/v2/CommitLogV2.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="71" column="43" lean-forward="false" selection-start-line="71" selection-start-column="43" selection-end-line="71" selection-end-column="43" />
+            <state relative-caret-position="120">
+              <caret line="72" column="41" lean-forward="true" selection-start-line="72" selection-start-column="41" selection-end-line="72" selection-end-column="41" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -31,17 +29,27 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="LogFileV2.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="LogFileV2.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/io/openmessaging/v2/LogFileV2.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="417">
-              <caret line="79" column="45" lean-forward="true" selection-start-line="79" selection-start-column="45" selection-end-line="79" selection-end-column="45" />
+            <state relative-caret-position="159">
+              <caret line="30" column="0" lean-forward="false" selection-start-line="30" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="IndexV2.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ReleaseUtil.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/io/openmessaging/v2/ReleaseUtil.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="78">
+              <caret line="14" column="13" lean-forward="false" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="IndexV2.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/io/openmessaging/v2/IndexV2.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="189">
@@ -56,7 +64,7 @@
       <file leaf-file-name="DemoTester.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/io/openmessaging/DemoTester.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="216">
+            <state relative-caret-position="-3348">
               <caret line="19" column="32" lean-forward="true" selection-start-line="19" selection-start-column="32" selection-end-line="19" selection-end-column="32" />
               <folding />
             </state>
@@ -123,13 +131,13 @@
         <option value="$PROJECT_DIR$/src/main/java/io/openmessaging/LogFile.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/openmessaging/DefaultQueueStoreImpl.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/openmessaging/v2/RealseUtil.java" />
-        <option value="$PROJECT_DIR$/src/main/java/io/openmessaging/v2/ReleaseUtil.java" />
         <option value="$PROJECT_DIR$/src/test/java/io/openmessaging/DemoTester.java" />
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/io/openmessaging/v2/IndexV2.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/openmessaging/DemoTester.java" />
-        <option value="$PROJECT_DIR$/src/main/java/io/openmessaging/v2/CommitLogV2.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/openmessaging/v2/ReleaseUtil.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/openmessaging/v2/LogFileV2.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/openmessaging/v2/CommitLogV2.java" />
       </list>
     </option>
   </component>
@@ -877,12 +885,12 @@
       <workItem from="1531156889908" duration="9412000" />
       <workItem from="1531200228958" duration="2313000" />
       <workItem from="1531206942688" duration="167000" />
-      <workItem from="1531226724836" duration="5303000" />
+      <workItem from="1531226724836" duration="6792000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="227113000" />
+    <option name="totallyTimeSpent" value="228602000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -1204,14 +1212,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/io/openmessaging/v2/ReleaseUtil.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="267">
-          <caret line="15" column="27" lean-forward="false" selection-start-line="15" selection-start-column="27" selection-end-line="15" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/io/openmessaging/DemoTester.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="127">
@@ -1284,9 +1284,35 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/io/openmessaging/DemoTester.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
+        <state relative-caret-position="-3348">
           <caret line="19" column="32" lean-forward="true" selection-start-line="19" selection-start-column="32" selection-end-line="19" selection-end-column="32" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/openmessaging/v2/ReleaseUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="78">
+          <caret line="14" column="13" lean-forward="false" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/openmessaging/v2/LogFileV2.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="159">
+          <caret line="30" column="0" lean-forward="false" selection-start-line="30" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/openmessaging/v2/CommitLogV2.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="72" column="41" lean-forward="true" selection-start-line="72" selection-start-column="41" selection-end-line="72" selection-end-column="41" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1297,24 +1323,6 @@
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/io/openmessaging/v2/CommitLogV2.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="71" column="43" lean-forward="false" selection-start-line="71" selection-start-column="43" selection-end-line="71" selection-end-column="43" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/io/openmessaging/v2/LogFileV2.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="417">
-          <caret line="79" column="45" lean-forward="true" selection-start-line="79" selection-start-column="45" selection-end-line="79" selection-end-column="45" />
-          <folding />
         </state>
       </provider>
     </entry>

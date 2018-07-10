@@ -2,21 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="75a2f0bb-454e-4bd8-81a8-e67584276a2a" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/target/race2018-1.0-SNAPSHOT.jar" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/io/openmessaging/v2/CommitLogV2.class" afterPath="$PROJECT_DIR$/target/classes/io/openmessaging/v2/CommitLogV2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/io/openmessaging/v2/LogFileV2.class" afterPath="$PROJECT_DIR$/target/classes/io/openmessaging/v2/LogFileV2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/io/openmessaging/v2/ReleaseUtil.class" afterPath="$PROJECT_DIR$/target/classes/io/openmessaging/v2/ReleaseUtil.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/test-classes/io/openmessaging/DemoTester$Consumer.class" afterPath="$PROJECT_DIR$/target/test-classes/io/openmessaging/DemoTester$Consumer.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/test-classes/io/openmessaging/DemoTester$IndexChecker.class" afterPath="$PROJECT_DIR$/target/test-classes/io/openmessaging/DemoTester$IndexChecker.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/test-classes/io/openmessaging/DemoTester$Producer.class" afterPath="$PROJECT_DIR$/target/test-classes/io/openmessaging/DemoTester$Producer.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/test-classes/io/openmessaging/DemoTester.class" afterPath="$PROJECT_DIR$/target/test-classes/io/openmessaging/DemoTester.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/io/openmessaging/v2/CommitLogV2.java" afterPath="$PROJECT_DIR$/src/main/java/io/openmessaging/v2/CommitLogV2.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/io/openmessaging/v2/IndexV2.java" afterPath="$PROJECT_DIR$/src/main/java/io/openmessaging/v2/IndexV2.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/io/openmessaging/v2/LogFileV2.java" afterPath="$PROJECT_DIR$/src/main/java/io/openmessaging/v2/LogFileV2.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/io/openmessaging/v2/ReleaseUtil.java" afterPath="$PROJECT_DIR$/src/main/java/io/openmessaging/v2/ReleaseUtil.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/io/openmessaging/DemoTester.java" afterPath="$PROJECT_DIR$/src/test/java/io/openmessaging/DemoTester.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -52,11 +38,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="LogFileV2.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="LogFileV2.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/io/openmessaging/v2/LogFileV2.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="81">
-              <caret line="57" column="35" lean-forward="true" selection-start-line="57" selection-start-column="35" selection-end-line="57" selection-end-column="35" />
+            <state relative-caret-position="308">
+              <caret line="41" column="33" lean-forward="true" selection-start-line="41" selection-start-column="33" selection-end-line="41" selection-end-column="33" />
               <folding />
             </state>
           </provider>
@@ -72,11 +58,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="true">
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="281">
-              <caret line="33" column="20" lean-forward="true" selection-start-line="33" selection-start-column="20" selection-end-line="33" selection-end-column="20" />
+            <state relative-caret-position="686">
+              <caret line="33" column="20" lean-forward="false" selection-start-line="33" selection-start-column="20" selection-end-line="33" selection-end-column="20" />
               <folding />
             </state>
           </provider>
@@ -147,8 +133,8 @@
         <option value="$PROJECT_DIR$/src/main/java/io/openmessaging/v2/ReleaseUtil.java" />
         <option value="$PROJECT_DIR$/src/test/java/io/openmessaging/DemoTester.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/openmessaging/DemoTester.java" />
-        <option value="$PROJECT_DIR$/src/main/java/io/openmessaging/v2/LogFileV2.java" />
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/io/openmessaging/v2/LogFileV2.java" />
       </list>
     </option>
   </component>
@@ -893,12 +879,12 @@
       <workItem from="1531102786043" duration="9196000" />
       <workItem from="1531143794575" duration="5060000" />
       <workItem from="1531151923217" duration="3204000" />
-      <workItem from="1531156889908" duration="6510000" />
+      <workItem from="1531156889908" duration="6673000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="216428000" />
+    <option name="totallyTimeSpent" value="216591000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -1304,18 +1290,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/io/openmessaging/v2/LogFileV2.java">
+    <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="81">
-          <caret line="57" column="35" lean-forward="true" selection-start-line="57" selection-start-column="35" selection-end-line="57" selection-end-column="35" />
+        <state relative-caret-position="686">
+          <caret line="33" column="20" lean-forward="false" selection-start-line="33" selection-start-column="20" selection-end-line="33" selection-end-column="20" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/openmessaging/v2/LogFileV2.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="281">
-          <caret line="33" column="20" lean-forward="true" selection-start-line="33" selection-start-column="20" selection-end-line="33" selection-end-column="20" />
+        <state relative-caret-position="308">
+          <caret line="41" column="33" lean-forward="true" selection-start-line="41" selection-start-column="33" selection-end-line="41" selection-end-column="33" />
           <folding />
         </state>
       </provider>

@@ -20,13 +20,13 @@ public class LogFileV2 {
     private RandomAccessFile randomAccessFile;
     private MappedByteBuffer readMap;
     private FileChannel fileChannel;
-    private MappedByteBuffer[] writeMap = new MappedByteBuffer[1];
-    private AtomicInteger[] umapSize = new AtomicInteger[1];
+    private MappedByteBuffer[] writeMap = new MappedByteBuffer[16];
+    private AtomicInteger[] umapSize = new AtomicInteger[16];
     public final static int SUCCESS = 200;
     public final static int END_FILE = 300;
     public final static int BLOCK_SIZE = 1024;
 
-    public final static int SIXTY_FOUR_SIZE = 1024*1024*1024;
+    public final static int SIXTY_FOUR_SIZE = 64*1024*1024;
     public final static short END = 0;
 
     public LogFileV2(File file) {
@@ -37,7 +37,7 @@ public class LogFileV2 {
             this.randomAccessFile = new RandomAccessFile(file,"rw");
             this.fileChannel = randomAccessFile.getChannel();
             this.readMap = fileChannel.map(FileChannel.MapMode.READ_WRITE,0, CommitLogV2.FILE_SIZE);
-            for (int i = 0; i < 1; i++) {
+            for (int i = 0; i < 16; i++) {
                 this.writeMap[i] = fileChannel.map(FileChannel.MapMode.READ_WRITE,i*SIXTY_FOUR_SIZE,SIXTY_FOUR_SIZE);
                 umapSize[i] = new AtomicInteger(0);
             }

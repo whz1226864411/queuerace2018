@@ -19,34 +19,42 @@ public class LogFileV2 {
 
     private RandomAccessFile randomAccessFile;
     private MappedByteBuffer readMap;
+    private MappedByteBuffer writeMap;
     private FileChannel fileChannel;
+    private File file;
     public final static int SUCCESS = 200;
     public final static int END_FILE = 300;
     public final static int BLOCK_SIZE = 600;//1024,600
 
     public final static int SIXTY_FOUR_SIZE = 64*1024*1024;
     public final static short END = 0;
+    private AtomicInteger atomicInteger = new AtomicInteger(0);
 
     public LogFileV2(File file) {
         try {
             if(!file.getParentFile().exists()){
                 file.getParentFile().mkdirs();
             }
+            this.file = file;
             this.randomAccessFile = new RandomAccessFile(file,"rw");
             this.fileChannel = randomAccessFile.getChannel();
             this.readMap = fileChannel.map(FileChannel.MapMode.READ_WRITE,0, CommitLogV2.FILE_SIZE);
+            this.writeMap = fileChannel.map(FileChannel.MapMode.READ_WRITE,0, CommitLogV2.FILE_SIZE);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public int appendMessage(byte[] message ,IndexV2 indexV2) throws IOException {
+        if (indexV2.getStart() == 0){
+            atomicInteger.getAndIncrement();
+        }
         short length = (short) message.length;
         short writePos = indexV2.getWritePos();
         int start = indexV2.getStart();
         int remain = LogFileV2.BLOCK_SIZE - writePos;
         short size = (short) (2 + length);
-        ByteBuffer byteBuffer = readMap.slice();
+        ByteBuffer byteBuffer = writeMap.slice();
         if( remain >= size){
             byteBuffer.position(start + writePos);//定位
             byteBuffer.put((byte) (length >>> 8));
@@ -66,13 +74,12 @@ public class LogFileV2 {
         }
     }
 
-//    public void decrease(IndexV2 indexV2){
-//        int start = indexV2.getStart();
-//        int i = umapSize[start/SIXTY_FOUR_SIZE].decrementAndGet();
-//        if (i == 0){
-//            ReleaseUtil.releaseMap(writeMap[start/SIXTY_FOUR_SIZE]);
-//        }
-//    }
+    public void decrease(){
+        int i = atomicInteger.decrementAndGet();
+        if (i == 0){
+            ReleaseUtil.releaseMap(writeMap);
+        }
+    }
 
     public MappedByteBuffer getMappedByteBuffer(){
         return readMap;

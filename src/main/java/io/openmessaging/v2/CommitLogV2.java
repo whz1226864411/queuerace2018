@@ -18,8 +18,8 @@ public class CommitLogV2 {
     private static final String ROOT_PATH = "/alidata1/race2018/data/";
     private List<LogFileV2> logFileList = new ArrayList<>();
     private volatile int nowIndex = -1;
-    public static final int FILE_SIZE = 1024 * 1024 * 1024;
-    private Object writeLock = new Object();
+    public static final int FILE_SIZE = 576 * 1024 * 1024;//1024,576
+
     private Object createFileLock = new Object();
 
     //索引
@@ -70,10 +70,9 @@ public class CommitLogV2 {
                     LogFileV2 logFileV2 = logFileList.get(indexPos);
                     int result = logFileV2.appendMessage(message,indexV2);
                     if (result == LogFileV2.END_FILE){
-                        logFileV2.decrease(indexV2);
+                        //logFileV2.decrease(indexV2);
                         indexV2.insert();
                         indexPos = indexV2.getIndexPos();
-                        //System.out.println(indexPos);
                         if (logFileList.size() - 1 < indexPos){
                             createLogFile(indexPos);
                         }

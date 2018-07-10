@@ -1,16 +1,19 @@
 package io.openmessaging.v2;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by Administrator on 2018-07-07.
  */
 public class IndexV2 {
+    public static short INIT_SIZE = 220;
     private int start;//起始位置
-    private short[] offsetList = new short[125];//每个数据文件第一个消息的offset,大小需要扩容
+    private short[] offsetList = new short[INIT_SIZE];//每个数据文件第一个消息的offset,大小需要扩容
     private short writePos = 0;//数据文件的写指针
     private short indexPos = -1;//索引写指针,也可以代表当前日志的位置
     private short count = 0;//消息数量
+    private short listSize = INIT_SIZE;
 
     public IndexV2(){
         insert();
@@ -34,6 +37,11 @@ public class IndexV2 {
     }
 
     public void insert() {
+        if (listSize < (indexPos + 2)){
+            //扩容
+            listSize += 5;
+            offsetList = Arrays.copyOf(offsetList,listSize);
+        }
         offsetList[++indexPos] = count;
         writePos = 0;
     }

@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class CommitLogV2 {
     private static final String ROOT_PATH = "/alidata1/race2018/data/";
-    private List<LogFileV2> logFileList = new ArrayList<>();
+    private volatile LogFileV2[] logFileList = new LogFileV2[250];
     private volatile int nowIndex = -1;
     public static final int FILE_SIZE = 576 * 1024 * 1024;//1024,576
 
@@ -31,15 +31,14 @@ public class CommitLogV2 {
         createLogFile((short) 0);
     }
 
-    public void createLogFile(short indexPos){//创建数据文件
+    public synchronized void createLogFile(short indexPos){//创建数据文件
         synchronized (createFileLock){
-            if (logFileList.size() - 1 < indexPos){
-                this.nowIndex++;
+            if (this.nowIndex < indexPos){
                 String path = ROOT_PATH + this.nowIndex + ".log";
                 File file = new File(path);
                 LogFileV2 logFile = new LogFileV2(file);
-                logFileList.add(logFile);
-                logFileList.size();
+                logFileList[this.nowIndex + 1] = logFile;
+                this.nowIndex++;
             }
         }
     }
@@ -67,13 +66,13 @@ public class CommitLogV2 {
                 }
                 synchronized (indexV2){
                     short indexPos = indexV2.getIndexPos();
-                    LogFileV2 logFileV2 = logFileList.get(indexPos);
+                    LogFileV2 logFileV2 = logFileList[indexPos];
                     int result = logFileV2.appendMessage(message,indexV2);
                     if (result == LogFileV2.END_FILE){
                         //logFileV2.decrease(indexV2);
                         indexV2.insert();
                         indexPos = indexV2.getIndexPos();
-                        if (logFileList.size() - 1 < indexPos){
+                        if (this.nowIndex < indexPos){
                             createLogFile(indexPos);
                         }
                         putMessage(queueName,message,indexV2);
@@ -97,7 +96,7 @@ public class CommitLogV2 {
         short initOffset = indexV2.getInitOffset(logIndex);
         int readPos = start;
         short readSize = 0;
-        LogFileV2 logFileV2 = logFileList.get(logIndex);
+        LogFileV2 logFileV2 = logFileList[logIndex];
         MappedByteBuffer mappedByteBuffer = logFileV2.getMappedByteBuffer();
         //mappedByteBuffer.position(0);
         ByteBuffer byteBuffer = mappedByteBuffer.slice();

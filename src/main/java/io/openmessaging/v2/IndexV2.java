@@ -11,7 +11,7 @@ public class IndexV2 {
     private int start;//起始位置
     private short[] offsetList = new short[INIT_SIZE];//每个数据文件第一个消息的offset,大小需要扩容
     private short writePos = 0;//数据文件的写指针
-    private short indexPos = -1;//索引写指针,也可以代表当前日志的位置
+    private volatile short indexPos = -1;//索引写指针,也可以代表当前日志的位置
     private short count = 0;//消息数量
     private short listSize = INIT_SIZE;
 

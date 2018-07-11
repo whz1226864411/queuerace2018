@@ -2,6 +2,7 @@ package io.openmessaging.v2;
 
 import io.openmessaging.CommitLog;
 import io.openmessaging.LogFile;
+import sun.misc.Unsafe;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -9,6 +10,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
+import java.nio.channels.AsynchronousFileChannel;
 import java.nio.channels.FileChannel;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -25,7 +27,7 @@ public class LogFileV2 {
     private File file;
     public final static int SUCCESS = 200;
     public final static int END_FILE = 300;
-    public final static int BLOCK_SIZE = 300;//1024,600
+    public final static int BLOCK_SIZE = 600;//1024,600
 
     public final static int SIXTY_FOUR_SIZE = 64*1024*1024;
     public final static short END = 0;
@@ -103,9 +105,12 @@ public class LogFileV2 {
                 byteBuffer.put((byte) END);
             }
             byteBuffer.flip();
-            FileChannel fileChannel = getFileChannel();
-            fileChannel.position(start);//定位
-            fileChannel.write(byteBuffer);
+            //FileChannel fileChannel = getFileChannel();
+            synchronized (fileChannel){
+                fileChannel.position(start);//定位
+                fileChannel.write(byteBuffer);
+            }
+
 
             byteBuffer.clear();
 
@@ -121,19 +126,6 @@ public class LogFileV2 {
 //        }
 //    }
 
-    public FileChannel getFileChannel(){
-        FileChannel fileChannel = threadLocal.get();
-        if (fileChannel == null){
-            try {
-                fileChannel = new RandomAccessFile(file,"rw").getChannel();
-                threadLocal.set(fileChannel);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return fileChannel;
-    }
 
 //    public void decrease(){
 //        int i = atomicInteger.decrementAndGet();

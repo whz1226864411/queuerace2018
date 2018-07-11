@@ -16,7 +16,6 @@ public class IndexV2 {
     private short count = 0;//消息数量
     private short listSize = INIT_SIZE;
     private ByteBuffer writeBuf = ByteBuffer.allocateDirect(LogFileV2.BLOCK_SIZE);
-    private ByteBuffer readBuf = ByteBuffer.allocate(LogFileV2.BLOCK_SIZE);
 
     public IndexV2(){
         insert();
@@ -105,11 +104,4 @@ public class IndexV2 {
         this.writeBuf = writeBuf;
     }
 
-    public ByteBuffer getReadBuf() {
-        return readBuf;
-    }
-
-    public void setReadBuf(ByteBuffer readBuf) {
-        this.readBuf = readBuf;
-    }
 }

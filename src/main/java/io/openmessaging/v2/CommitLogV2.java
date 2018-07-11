@@ -68,9 +68,9 @@ public class CommitLogV2 {
                 synchronized (indexV2){
                     short indexPos = indexV2.getIndexPos();
                     LogFileV2 logFileV2 = logFileList[indexPos];
-                    int result = logFileV2.appendMessage(message,indexV2);
+                    int result = logFileV2.appendMessageV2(message,indexV2);
                     if (result == LogFileV2.END_FILE){
-                        //logFileV2.decrease();
+                       // logFileV2.decrease();
                         indexV2.insert();
                         indexPos = indexV2.getIndexPos();
                         if (this.nowIndex < indexPos){
@@ -118,6 +118,64 @@ public class CommitLogV2 {
                     readSize += 2 + length;
                 }else {
                     getMessage(queueName,offset + i, (num - i),result,indexV2,logIndex + 1);
+                    break;
+                }
+            }else {
+                break;
+            }
+        }
+        return result;
+    }
+
+    public Collection<byte[]> getMessageV2(String queueName, long offset, long num,
+                                         List<byte[]> result,IndexV2 indexV2, int logIndex){
+        if (result == null){
+            result = new ArrayList<>();
+            indexV2 = getIndexV2(queueName);
+            logIndex = indexV2.search((short) offset);
+
+        }
+
+        int start = indexV2.getStart();
+        short initOffset = indexV2.getInitOffset(logIndex);
+        int readPos = 0;
+        short readSize = 0;
+        LogFileV2 logFileV2 = logFileList[logIndex];
+        //System.out.println(logIndex+"="+logFileV2 + ":"+ this.nowIndex);
+        ByteBuffer mappedByteBuffer = null;
+        ByteBuffer byteBuffer = null;
+        if (logIndex == this.nowIndex){
+            mappedByteBuffer = indexV2.getWriteBuf();
+            int write = mappedByteBuffer.position();
+            //System.out.println(write);
+            mappedByteBuffer.position(0);
+            byteBuffer = mappedByteBuffer.slice();
+                //mappedByteBuffer.position(write);
+        }else {
+            //logFileV2.flush();
+            mappedByteBuffer = logFileV2.getMappedByteBuffer();
+            byteBuffer = mappedByteBuffer.slice();
+            readPos = start;
+        }
+
+        byteBuffer.position(readPos);
+        short length = 0;
+        for (short i = 0; i < (offset - initOffset); i++) {
+            length = byteBuffer.getShort();
+            int j = 2+ length;
+            readPos += j;
+            readSize += j;
+            byteBuffer.position(readPos);
+        }
+        for (int i = 0; i < num; i++) {
+            if (offset + i  < indexV2.getCount()){
+                if ( LogFileV2.BLOCK_SIZE - readSize >= 2 && (length = byteBuffer.getShort()) != 0){
+                    byte[] bytes = new byte[length];
+                    byteBuffer.get(bytes);
+                    result.add(bytes);
+                    readSize += 2 + length;
+                }else {
+                    getMessageV2(queueName,offset + i, (num - i),result,indexV2,logIndex + 1);
                     break;
                 }
             }else {

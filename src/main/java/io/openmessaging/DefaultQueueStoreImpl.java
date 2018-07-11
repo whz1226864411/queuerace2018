@@ -46,7 +46,7 @@ public class DefaultQueueStoreImpl extends QueueStore {
 //            atomicInteger2.getAndIncrement();
 //        }
 
-        Collection<byte[]> result = commitLogV2.getMessage(queueName,offset,num,null,null,0);
+        Collection<byte[]> result = commitLogV2.getMessageV2(queueName,offset,num,null,null,0);
 //        List<byte[]> resul = (List<byte[]>) result;
 //        if(atomicInteger.get() > 1000000 - 20){
 //            StringBuilder stringBuilder = new StringBuilder();

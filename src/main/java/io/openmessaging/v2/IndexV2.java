@@ -1,5 +1,6 @@
 package io.openmessaging.v2;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -14,6 +15,8 @@ public class IndexV2 {
     private volatile short indexPos = -1;//索引写指针,也可以代表当前日志的位置
     private short count = 0;//消息数量
     private short listSize = INIT_SIZE;
+    private ByteBuffer writeBuf = ByteBuffer.allocateDirect(LogFileV2.BLOCK_SIZE);
+    private ByteBuffer readBuf = ByteBuffer.allocate(LogFileV2.BLOCK_SIZE);
 
     public IndexV2(){
         insert();
@@ -29,6 +32,12 @@ public class IndexV2 {
                 h = m - 1;
             }
         }
+//        if (offset == 90){
+//            System.out.println(h);
+//        }
+//        if (offset == 85){
+//            System.out.println("85="+h);
+//        }
         return h;
     }
 
@@ -88,4 +97,19 @@ public class IndexV2 {
         this.count = count;
     }
 
+    public ByteBuffer getWriteBuf() {
+        return writeBuf;
+    }
+
+    public void setWriteBuf(ByteBuffer writeBuf) {
+        this.writeBuf = writeBuf;
+    }
+
+    public ByteBuffer getReadBuf() {
+        return readBuf;
+    }
+
+    public void setReadBuf(ByteBuffer readBuf) {
+        this.readBuf = readBuf;
+    }
 }

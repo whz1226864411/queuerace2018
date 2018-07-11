@@ -29,7 +29,8 @@ public class LogFileV2 {
 
     public final static int SIXTY_FOUR_SIZE = 64*1024*1024;
     public final static short END = 0;
-    //private AtomicInteger atomicInteger = new AtomicInteger(0);
+    private ThreadLocal<FileChannel> threadLocal = new ThreadLocal<>();
+   // private AtomicInteger atomicInteger = new AtomicInteger(0);
 
 
     public LogFileV2(File file) {
@@ -76,10 +77,74 @@ public class LogFileV2 {
         }
     }
 
+    public int appendMessageV2(byte[] message ,IndexV2 indexV2) throws IOException {
+//        if (indexV2.getWritePos() == 0){
+//            atomicInteger.getAndIncrement();
+//        }
+        short length = (short) message.length;
+        short writePos = indexV2.getWritePos();
+        int start = indexV2.getStart();
+        int remain = LogFileV2.BLOCK_SIZE - writePos;
+        short size = (short) (2 + length);
+        ByteBuffer byteBuffer = indexV2.getWriteBuf();
+        if( remain >= size){
+            byteBuffer.position(writePos);//定位
+            byteBuffer.put((byte) (length >>> 8));
+            byteBuffer.put((byte) length);
+            byteBuffer.put(message);
+
+            //修改索引
+            indexV2.increaseWritePos(size);
+            return LogFileV2.SUCCESS;
+        } else {
+            if (remain >= 2) {
+                byteBuffer.position(writePos);//定位
+                byteBuffer.put((byte) (END >>> 8));
+                byteBuffer.put((byte) END);
+            }
+            byteBuffer.flip();
+            FileChannel fileChannel = getFileChannel();
+            fileChannel.position(start);//定位
+            fileChannel.write(byteBuffer);
+
+            byteBuffer.clear();
+
+            return LogFileV2.END_FILE;
+        }
+    }
+
+//    public void flush(){
+//        try {
+//            fileChannel.force(true);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+
+    public FileChannel getFileChannel(){
+        FileChannel fileChannel = threadLocal.get();
+        if (fileChannel == null){
+            try {
+                fileChannel = new RandomAccessFile(file,"rw").getChannel();
+                threadLocal.set(fileChannel);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return fileChannel;
+    }
+
 //    public void decrease(){
 //        int i = atomicInteger.decrementAndGet();
 //        if (i == 0){
-//                    ReleaseUtil.releaseMap(writeMap);
+//            //ReleaseUtil.releaseMap(writeMap);
+//            try {
+//                System.out.println("刷");
+//                fileChannel.force(true);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
 //        }
 //    }
 

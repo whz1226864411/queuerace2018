@@ -17,9 +17,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class CommitLogV2 {
     private static final String ROOT_PATH = "/alidata1/race2018/data/";
-    private volatile LogFileV2[] logFileList = new LogFileV2[250];
+    private volatile LogFileV2[] logFileList = new LogFileV2[480];
     private volatile int nowIndex = -1;
-    public static final int FILE_SIZE = 576 * 1024 * 1024;//1024,576
+    public static final int FILE_SIZE = 288 * 1024 * 1024;//1024,576
 
     private Object createFileLock = new Object();
 
@@ -70,7 +70,7 @@ public class CommitLogV2 {
                     LogFileV2 logFileV2 = logFileList[indexPos];
                     int result = logFileV2.appendMessage(message,indexV2);
                     if (result == LogFileV2.END_FILE){
-                        logFileV2.decrease();
+                        //logFileV2.decrease();
                         indexV2.insert();
                         indexPos = indexV2.getIndexPos();
                         if (this.nowIndex < indexPos){

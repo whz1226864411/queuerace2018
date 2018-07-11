@@ -7,7 +7,7 @@ import java.util.Arrays;
  * Created by Administrator on 2018-07-07.
  */
 public class IndexV2 {
-    public static short INIT_SIZE = 220;
+    public static short INIT_SIZE = 450;
     private int start;//起始位置
     private short[] offsetList = new short[INIT_SIZE];//每个数据文件第一个消息的offset,大小需要扩容
     private short writePos = 0;//数据文件的写指针

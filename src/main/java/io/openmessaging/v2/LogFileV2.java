@@ -25,11 +25,11 @@ public class LogFileV2 {
     private File file;
     public final static int SUCCESS = 200;
     public final static int END_FILE = 300;
-    public final static int BLOCK_SIZE = 600;//1024,600
+    public final static int BLOCK_SIZE = 300;//1024,600
 
     public final static int SIXTY_FOUR_SIZE = 64*1024*1024;
     public final static short END = 0;
-    private AtomicInteger atomicInteger = new AtomicInteger(0);
+    //private AtomicInteger atomicInteger = new AtomicInteger(0);
 
 
     public LogFileV2(File file) {
@@ -48,9 +48,9 @@ public class LogFileV2 {
     }
 
     public int appendMessage(byte[] message ,IndexV2 indexV2) throws IOException {
-        if (indexV2.getWritePos() == 0){
-            atomicInteger.getAndIncrement();
-        }
+//        if (indexV2.getWritePos() == 0){
+//            atomicInteger.getAndIncrement();
+//        }
         short length = (short) message.length;
         short writePos = indexV2.getWritePos();
         int start = indexV2.getStart();
@@ -76,19 +76,12 @@ public class LogFileV2 {
         }
     }
 
-    public void decrease(){
-        int i = atomicInteger.decrementAndGet();
-        if (i == 0){
-//            synchronized (writeMap){
-//                if (this.writeMap != null){
-            System.out.println("umap");
-                    ReleaseUtil.releaseMap(writeMap);
-//                    this.writeMap = null;
-//                }
-//            }
-
-        }
-    }
+//    public void decrease(){
+//        int i = atomicInteger.decrementAndGet();
+//        if (i == 0){
+//                    ReleaseUtil.releaseMap(writeMap);
+//        }
+//    }
 
     public MappedByteBuffer getMappedByteBuffer(){
         return readMap;

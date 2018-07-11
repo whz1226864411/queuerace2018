@@ -27,11 +27,11 @@ public class LogFileV2 {
     private File file;
     public final static int SUCCESS = 200;
     public final static int END_FILE = 300;
-    public final static int BLOCK_SIZE = 600;//1024,600
+    public final static int BLOCK_SIZE = 300;//1024,600
 
     public final static int SIXTY_FOUR_SIZE = 64*1024*1024;
     public final static short END = 0;
-    private ThreadLocal<FileChannel> threadLocal = new ThreadLocal<>();
+//    private ThreadLocal<FileChannel> threadLocal = new ThreadLocal<>();
    // private AtomicInteger atomicInteger = new AtomicInteger(0);
 
 
@@ -105,18 +105,29 @@ public class LogFileV2 {
                 byteBuffer.put((byte) END);
             }
             byteBuffer.flip();
-            //FileChannel fileChannel = getFileChannel();
+//            FileChannel fileChannel = getFileChannel();
             synchronized (fileChannel){
                 fileChannel.position(start);//定位
                 fileChannel.write(byteBuffer);
             }
-
-
             byteBuffer.clear();
 
             return LogFileV2.END_FILE;
         }
     }
+
+//    public FileChannel getFileChannel(){
+//        FileChannel fileChannel = threadLocal.get();
+//        if (fileChannel == null){
+//            try {
+//                fileChannel = new RandomAccessFile(file,"rw").getChannel();
+//                threadLocal.set(fileChannel);
+//            } catch (FileNotFoundException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        return fileChannel;
+//    }
 
 //    public void flush(){
 //        try {

@@ -19,7 +19,7 @@ public class CommitLogV2 {
     private static final String ROOT_PATH = "/alidata1/race2018/data/";
     private volatile LogFileV2[] logFileList = new LogFileV2[480];
     private volatile int nowIndex = -1;
-    public static final int FILE_SIZE = 576 * 1024 * 1024;//1024,576
+    public static final int FILE_SIZE = 288 * 1024 * 1024;//1024,576
 
     private Object createFileLock = new Object();
 
